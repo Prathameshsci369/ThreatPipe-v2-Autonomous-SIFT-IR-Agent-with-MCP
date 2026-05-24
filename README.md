@@ -48,7 +48,7 @@ This project is designed to run on the SANS SIFT Workstation, which is built on 
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/Prathameshsci369/ThreatPipe-v2-Autonomous-SIFT-IR-Agent-with-MCP.git
-cd ThreatPipe-v2
+cd ThreatPipe-v2-Autonomous-SIFT-IR-Agent-with-MCP
 ```
 
 ### 2. Run the One-Click Setup
