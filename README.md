@@ -11,9 +11,7 @@ An autonomous AI incident response agent that classifies logs, investigates arti
 
 ![ThreatPipe v2 Architecture](ThreatPipe-v2/threatpipe_v2_architecture.png)
 
-*🛑 **Red solid boxes** = Architectural Guardrails (code-enforced, cannot be bypassed by LLM)*
-*🔵 **Blue dotted boxes** = Prompt-Based (LLM reasoning, can vary)*
-*⚪ **Gray boxes** = Deterministic Code (regex, rules, filesystem checks — no LLM)*
+
 
 ---
 
