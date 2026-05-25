@@ -1,0 +1,56 @@
+# ThreatPipe v2 — Configuration
+# ================================
+# Ithe sagle paths, model params, thresholds eka jaagi.
+# SIFT workstation la hya paths match karayla update kara.
+
+# ─── LLM ──────────────────────────────────────────────────────────────────────
+llm:
+  provider: "mistral"              # "mistral" | "local_llama"
+  model: "mistral-small-latest"
+  temperature: 0.0
+  max_tokens: 2000
+  # local llama path (use if provider = local_llama)
+  llama_model_path: "/opt/models/qwen3.5-4b.gguf"
+
+# ─── Evidence Graph ───────────────────────────────────────────────────────────
+graph:
+  db_path: "./threatpipe_evidence.db"
+  # Max nodes per session before we warn about graph size
+  max_nodes_warn: 500
+
+# ─── Investigation loop ───────────────────────────────────────────────────────
+agent:
+  max_cycles: 3        # max self-correction retries per trigger
+  confidence_threshold: 0.7   # below this = AMBIGUOUS → escalate
+
+# ─── SIFT tool paths ──────────────────────────────────────────────────────────
+# On stock SIFT these are already in PATH. Override here if needed.
+tools:
+  strings:      "strings"
+  file:         "file"
+  fls:          "fls"
+  icat:         "icat"
+  md5sum:       "md5sum"
+  sha256sum:    "sha256sum"
+  mmls:         "mmls"
+  fsstat:       "fsstat"
+  log2timeline: "log2timeline"
+  mactime:      "mactime"
+  volatility:   "vol"       # may be "volatility" or "vol3" depending on SIFT version
+  grep:         "grep"
+
+# ─── Web root (for web log investigations) ───────────────────────────────────
+web_root: "/tmp/threatpipe_evidence/www"
+
+# ─── Logging ──────────────────────────────────────────────────────────────────
+logging:
+  log_dir: "./logs"
+  # console_level: INFO shows verdicts + tool results on terminal
+  # file gets DEBUG always (everything)
+  console_level: "INFO"
+
+# ─── MCP Server (Phase 4) ────────────────────────────────────────────────────
+mcp:
+  enabled: false       # enable when Phase 4 ready
+  host: "127.0.0.1"
+  port: 9000
