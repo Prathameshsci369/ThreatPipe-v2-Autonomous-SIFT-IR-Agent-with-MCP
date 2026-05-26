@@ -166,7 +166,7 @@ The sliding window triage (Stage 1) reduces agent calls significantly, but real-
 3. **No Formal Ground Truth:** Current evaluation is manual review post-run. A labeled ground truth CSV (planned for v2.1) will enable formal computation of precision, recall, and F1.
 
 ## Formal Ground Truth
-A labeled ground truth CSV and Excel dashboard with precision/recall/F1 
+A labeled ground truth Excel dashboard with precision/recall/F1 
 scores is available at:
 [ThreatPipe_v2_Ground_Truth.xlsx](ThreatPipe-v2/ThreatPipe_v2_Ground_Truth.xlsx)
 - Macro F1 Score: ~96.0%
