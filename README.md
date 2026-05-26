@@ -3,15 +3,19 @@
 
 > **FIND EVIL! Hackathon Submission** | Pattern: Multi-Agent Framework (LangGraph) + Custom MCP Server
 
-An autonomous AI incident response agent that classifies logs, investigates artifacts with SIFT tools via a guarded MCP server, self-corrects through 4-lens cross-referencing, and predicts attacker next moves using a persistent behavioral graph.
+AI-powered adversaries can go from initial access to full domain control in under 8 minutes. Meanwhile, human incident responders are still looking up command-line flags. **ThreatPipe v2 closes that gap.**
+
+ThreatPipe v2 is an autonomous, SIFT-native incident response agent that doesn't just suggest commands—it executes the forensic workflow safely, at machine speed, without hallucinating or destroying evidence. It operates in four stages:
+1. **LLM Log Triage:** Instantly identifies suspicious logs from noisy datasets using a sliding window LLM.
+2. **Autonomous SIFT Investigation:** Parses logs, locates artifacts on disk, and executes real forensic tools (`strings`, `file`, `grep`, `fls`) via a custom MCP server.
+3. **4-Lens Cross-Referencing & Self-Correction:** Forces the LLM to analyze evidence from Hacker, Temporal, Kill Chain, and Analyst perspectives. If confidence is low, it autonomously retries with an alternate tool.
+4. **Persistent Attacker Tracking:** Maps attacker behavior to a persistent "Hacker Mindset Graph," calculating risk scores and predicting their next MITRE ATT&CK move.
 
 ---
 
 ## 📐 Architecture Diagram
 
 ![ThreatPipe v2 Architecture](ThreatPipe-v2/threatpipe_v2_architecture.png)
-
-
 
 ---
 
@@ -47,7 +51,6 @@ This project is designed to run on the SANS SIFT Workstation, which is built on 
 ```bash
 git clone https://github.com/Prathameshsci369/ThreatPipe-v2-Autonomous-SIFT-IR-Agent-with-MCP.git
 cd ThreatPipe-v2-Autonomous-SIFT-IR-Agent-with-MCP/ThreatPipe-v2/
-
 ```
 
 ### 2. Run the One-Click Setup
@@ -69,6 +72,34 @@ source venv/bin/activate
 streamlit run dashboard.py
 ```
 Open your browser to `http://localhost:8501`, upload the generated `realistic_attack.log`, and click **🚀 Run Analysis**!
+
+---
+
+## 🛠️ Manual Setup (If `setup.sh` fails)
+
+If the one-click script fails, follow these steps manually:
+
+```bash
+# 1. Create and activate virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# 2. Install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# 3. Create the forensic test files on disk (The Crime Scene)
+python3 setup_test_evidence.py
+
+# 4. Generate the attack log files (The Camera Footage)
+python3 generate_test_logs.py --size medium
+
+# 5. Set your API key
+export MISTRAL_API_KEY='your-mistral-api-key-here'
+
+# 6. Run the agent!
+streamlit run dashboard.py
+```
 
 ---
 
@@ -96,6 +127,19 @@ curl -X POST http://localhost:9000/investigate \
   -d '{"log_line": "192.168.1.55 - - [16/Apr/2026:03:14:25] \"GET /uploads/shell.php?cmd=whoami HTTP/1.1\" 200"}'
 ```
 
+### 🧪 Generating Different Test Data
+ThreatPipe includes a powerful log generator to test the LLM sliding window with different data volumes:
+```bash
+# Small dataset (Fast test, ~30 lines)
+python generate_test_logs.py --size small
+
+# Large dataset (Tests LLM context chunking, ~3000 lines)
+python generate_test_logs.py --size large
+
+# Targeted test (Only Web Shells and SQLi attacks)
+python generate_test_logs.py --attacks webshell,sqli --output sqli_test.log
+```
+
 ---
 
 ## 🔒 Security & MCP Guardrails
@@ -110,6 +154,15 @@ Instead of giving the LLM an open shell (`execute_shell_cmd`), `agent.py` routes
 3. **🛡️ Path Validation:** Prevents path traversal attacks by validating artifact paths before execution.
 
 > *If the LLM hallucinates a destructive command, the MCP server blocks it. If the model ignores read-only rules, the architecture enforces them.*
+
+---
+
+## 📊 Accuracy & Dataset Reports
+
+We take IR accuracy and evidence integrity seriously. ThreatPipe is designed to have **zero false positives** (it will not hallucinate attacks without tool evidence) while actively self-correcting to minimize false negatives.
+
+- 📄 **[Accuracy Report](accuracy_report.md):** Detailed self-assessment of findings accuracy, hallucination checks, evidence integrity testing, and iterative bug fixes.
+- 📄 **[Dataset Documentation](dataset_documentation.md):** Ground truth documentation for the generated test dataset, covering 4 attack campaigns and 6 log formats.
 
 ---
 
@@ -145,7 +198,7 @@ ThreatPipe-v2/
     └── archi.svg             # 🖼️ Architecture diagram image
 ```
 
----
+
 
 ## 📜 License
 
@@ -156,5 +209,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <p align="center">
   Built with ❤️ for the <strong>FIND EVIL! Hackathon</strong>
 </p>
-
-
