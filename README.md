@@ -1,5 +1,18 @@
 
+
 # 🛡️ ThreatPipe v2: Autonomous SIFT IR Agent with MCP
+
+![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat&logo=python&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-Agentic_Pipeline-FF6B35?style=flat&logo=graphql&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-MCP_Server-009688?style=flat&logo=fastapi&logoColor=white)
+![Mistral AI](https://img.shields.io/badge/Mistral_AI-LLM_Backend-FF7000?style=flat&logo=ai&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-SOC_Dashboard-FF4B4B?style=flat&logo=streamlit&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-Evidence_Graph-003B57?style=flat&logo=sqlite&logoColor=white)
+![NetworkX](https://img.shields.io/badge/NetworkX-Hacker_Graph-4CAF50?style=flat&logo=python&logoColor=white)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE_ATT%26CK-Aligned-CC0000?style=flat&logo=shield&logoColor=white)
+![SIFT Workstation](https://img.shields.io/badge/SIFT_Workstation-Native-1A237E?style=flat&logo=linux&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat)
+![Hackathon](https://img.shields.io/badge/FIND_EVIL!_2026-Submission-FFD700?style=flat&logo=trophy&logoColor=black)
 
 > **FIND EVIL! Hackathon Submission** | Pattern: Multi-Agent Framework (LangGraph) + Custom MCP Server
 
@@ -128,7 +141,6 @@ curl -X POST http://localhost:9000/investigate \
 ```
 
 ### 🧪 Generating Different Test Data
-ThreatPipe includes a powerful log generator to test the LLM sliding window with different data volumes:
 ```bash
 # Small dataset (Fast test, ~30 lines)
 python generate_test_logs.py --size small
@@ -147,7 +159,6 @@ python generate_test_logs.py --attacks webshell,sqli --output sqli_test.log
 In incident response, evidence integrity is paramount. ThreatPipe enforces safety through **architectural guardrails**, not just prompt-based instructions.
 
 ### How the MCP Tool Layer Protects Evidence
-Instead of giving the LLM an open shell (`execute_shell_cmd`), `agent.py` routes all tool requests through `mcp_tools.py`:
 
 1. **🛑 Tool Allowlist:** The agent can only call read-only forensic tools (`strings`, `file`, `grep`, `fls`, `sha256sum`, `volatility`). Destructive commands (`rm`, `dd`, `shred`, `mkfs`) are physically impossible to execute because they are not in the `ALLOWED_SIFT_TOOLS` dictionary.
 2. **✂️ Output Truncation:** SIFT tools can dump megabytes of text, crashing the LLM's context window. The MCP layer truncates output to 5KB before returning it to the agent.
@@ -159,10 +170,29 @@ Instead of giving the LLM an open shell (`execute_shell_cmd`), `agent.py` routes
 
 ## 📊 Accuracy & Dataset Reports
 
-We take IR accuracy and evidence integrity seriously. ThreatPipe is designed to have **zero false positives** (it will not hallucinate attacks without tool evidence) while actively self-correcting to minimize false negatives.
+We take IR accuracy and evidence integrity seriously. ThreatPipe is evaluated against a formally labeled ground truth dataset covering **4 attack campaigns** and **6 log formats**.
+
+| Metric | Value |
+|---|---|
+| Total Lines Analyzed | 298 |
+| Stage 1 Suspicious Classified | 45 |
+| Total Agent Cycles | 96 (avg. 2.1/log) |
+| Total LLM Cost | $0.0209 |
+| Total Runtime | 316.1 seconds |
+| False Positives | **0** |
+| Evidence Spoliation | **0** |
+| **Macro F1 Score** | **~96.0%** |
+
+| Class | Precision | Recall | F1 |
+|---|---|---|---|
+| MALICIOUS | 100% | 94.4% | 97.1% |
+| SUSPICIOUS | 100% | 100% | 100% |
+| BENIGN | 83.3% | 100% | 90.9% |
+| **Macro Avg** | **94.4%** | **98.1%** | **96.0%** |
 
 - 📄 **[Accuracy Report](ThreatPipe-v2/accuracy_report.md):** Detailed self-assessment of findings accuracy, hallucination checks, evidence integrity testing, and iterative bug fixes.
 - 📄 **[Dataset Documentation](ThreatPipe-v2/dataset_documentation.md):** Ground truth documentation for the generated test dataset, covering 4 attack campaigns and 6 log formats.
+- 📊 **[Ground Truth Excel Report](ThreatPipe-v2/ThreatPipe_v2_Ground_Truth.xlsx):** Formally labeled dataset with per-finding verdict comparison, 4-lens documentation, self-correction cycle counts, and full precision/recall/F1 dashboard.
 
 ---
 
@@ -194,11 +224,10 @@ ThreatPipe-v2/
 ├── architecture_diagram.md   # 📐 Architecture + security boundaries
 ├── dataset_documentation.md  # 📊 Dataset details
 ├── accuracy_report.md        # 🎯 Accuracy self-assessment
-└── images/
-    └── archi.svg             # 🖼️ Architecture diagram image
+└── ThreatPipe_v2_Ground_Truth.xlsx  # 📊 Formal ground truth + F1 dashboard
 ```
 
-
+---
 
 ## 📜 License
 
@@ -209,3 +238,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <p align="center">
   Built with ❤️ for the <strong>FIND EVIL! Hackathon</strong>
 </p>
+
+---
+
