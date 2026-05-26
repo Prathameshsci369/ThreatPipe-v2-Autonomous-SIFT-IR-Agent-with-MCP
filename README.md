@@ -161,8 +161,8 @@ Instead of giving the LLM an open shell (`execute_shell_cmd`), `agent.py` routes
 
 We take IR accuracy and evidence integrity seriously. ThreatPipe is designed to have **zero false positives** (it will not hallucinate attacks without tool evidence) while actively self-correcting to minimize false negatives.
 
-- 📄 **[Accuracy Report](accuracy_report.md):** Detailed self-assessment of findings accuracy, hallucination checks, evidence integrity testing, and iterative bug fixes.
-- 📄 **[Dataset Documentation](dataset_documentation.md):** Ground truth documentation for the generated test dataset, covering 4 attack campaigns and 6 log formats.
+- 📄 **[Accuracy Report](ThreatPipe-v2/accuracy_report.md):** Detailed self-assessment of findings accuracy, hallucination checks, evidence integrity testing, and iterative bug fixes.
+- 📄 **[Dataset Documentation](ThreatPipe-v2/dataset_documentation.md):** Ground truth documentation for the generated test dataset, covering 4 attack campaigns and 6 log formats.
 
 ---
 
